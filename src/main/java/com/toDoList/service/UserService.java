@@ -1,7 +1,7 @@
 package com.toDoList.service;
 
 import com.toDoList.domain.User;
-import com.toDoList.dto.UserDto;
+import com.toDoList.dto.UserDto.EditPassword;
 import com.toDoList.dto.UserDto.LoginRequest;
 import com.toDoList.dto.UserDto.SignUpRequest;
 import com.toDoList.dto.UserDto.TokenResponse;
@@ -61,6 +61,12 @@ public class UserService {
         String password = bCryptPasswordEncoder.encode(signUpRequest.getPassword());
         User user = signUpRequest.to(signUpRequest.getNickName(), signUpRequest.getEmail(), password);
         userRepository.save(user);
+    }
+
+    public void editPassword(EditPassword editPassword) {
+        User user = userRepository.findByEmail(editPassword.getEmail()).orElseThrow();
+        String password = bCryptPasswordEncoder.encode(editPassword.getPassword());
+        user.editPassword(password);
     }
 
     public TokenResponse login(LoginRequest loginRequest) {

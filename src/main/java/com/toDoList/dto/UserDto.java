@@ -36,6 +36,15 @@ public class UserDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class EditPassword {
+        private String email;
+        private String password;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Email {
         private String email;
     }
