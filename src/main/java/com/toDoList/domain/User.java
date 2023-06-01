@@ -28,4 +28,8 @@ public class User {
     private int status;
     @OneToMany(mappedBy = "user")
     List<ToDo> toDos = new ArrayList<>();
+
+    public void editPassword(String password) {
+        this.password = password;
+    }
 }
