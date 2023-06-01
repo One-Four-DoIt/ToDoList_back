@@ -2,11 +2,19 @@ package com.toDoList.service;
 
 import com.toDoList.domain.User;
 import com.toDoList.dto.UserDto;
+import com.toDoList.dto.UserDto.LoginRequest;
 import com.toDoList.dto.UserDto.SignUpRequest;
+import com.toDoList.dto.UserDto.TokenResponse;
 import com.toDoList.global.config.email.EmailService;
+import com.toDoList.global.config.security.jwt.JwtTokenProvider;
+import com.toDoList.global.config.security.jwt.TokenInfoResponse;
 import com.toDoList.repository.springDataJpa.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +29,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
     public boolean checkEmailDup(String email) {
@@ -51,5 +61,16 @@ public class UserService {
         String password = bCryptPasswordEncoder.encode(signUpRequest.getPassword());
         User user = signUpRequest.to(signUpRequest.getNickName(), signUpRequest.getEmail(), password);
         userRepository.save(user);
+    }
+
+    public TokenResponse login(LoginRequest loginRequest) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
+        Authentication authentication =
+                authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.info("securityContextHolder 저장");
+        TokenInfoResponse tokenInfoResponse = jwtTokenProvider.createToken(authentication);
+        return TokenResponse.from(tokenInfoResponse);
     }
 }

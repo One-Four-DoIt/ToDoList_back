@@ -2,7 +2,9 @@ package com.toDoList.controller;
 
 import com.toDoList.dto.UserDto;
 import com.toDoList.dto.UserDto.Email;
+import com.toDoList.dto.UserDto.LoginRequest;
 import com.toDoList.dto.UserDto.SignUpRequest;
+import com.toDoList.dto.UserDto.TokenResponse;
 import com.toDoList.global.dto.ResponseDto;
 import com.toDoList.service.UserService;
 import io.swagger.annotations.Api;
@@ -54,5 +56,12 @@ public class UserController {
     public ResponseEntity<ResponseDto> signUp(@RequestBody SignUpRequest signUpRequest) {
         userService.signUp(signUpRequest);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), SIGNUP_SUCCESS.getMessage()));
+    }
+
+    @PostMapping("/login")
+    @ApiOperation(value = "로그인", notes = "로그인을 진행합니다.")
+    public ResponseEntity<ResponseDto<TokenResponse>> login(@RequestBody LoginRequest loginRequest) {
+        TokenResponse login = userService.login(loginRequest);
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGIN_SUCCESS.getMessage(), login));
     }
 }
