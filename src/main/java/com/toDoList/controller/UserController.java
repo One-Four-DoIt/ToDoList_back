@@ -67,4 +67,11 @@ public class UserController {
         userService.editPassword(editPassword);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), EDIT_PASSWORD_SUCCESS.getMessage()));
     }
+
+    @PostMapping("/logout")
+    @ApiOperation(value = "로그아웃", notes = "accessToken 필요")
+    public ResponseEntity<ResponseDto> logout(@RequestHeader("Authorization") String authorization) {
+        userService.logout(authorization);
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGOUT_SUCCESS.getMessage()));
+    }
 }

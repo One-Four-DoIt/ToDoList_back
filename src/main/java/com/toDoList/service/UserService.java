@@ -6,9 +6,11 @@ import com.toDoList.dto.UserDto.LoginRequest;
 import com.toDoList.dto.UserDto.SignUpRequest;
 import com.toDoList.dto.UserDto.TokenResponse;
 import com.toDoList.global.config.email.EmailService;
+import com.toDoList.global.config.redis.RedisRepository;
 import com.toDoList.global.config.security.jwt.JwtTokenProvider;
 import com.toDoList.global.config.security.jwt.TokenInfoResponse;
 import com.toDoList.repository.springDataJpa.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.Optional;
 
 @Service
@@ -31,6 +34,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final RedisRepository redisRepository;
 
 
     public boolean checkEmailDup(String email) {
@@ -78,5 +82,17 @@ public class UserService {
         log.info("securityContextHolder 저장");
         TokenInfoResponse tokenInfoResponse = jwtTokenProvider.createToken(authentication);
         return TokenResponse.from(tokenInfoResponse);
+    }
+
+    public void logout(String authorization) {
+        String token = authorization.substring(7);
+        String userIdx = jwtTokenProvider.getUserIdx(token);
+        try {
+            Long expiration = jwtTokenProvider.getExpiration(token);
+            redisRepository.setValues("blackList:" + token, token, Duration.ofSeconds(expiration)); //Access Token 남은 시간동안 블랙리스트
+        } catch (ExpiredJwtException e) {
+        } finally {
+            redisRepository.deleteValues(String.valueOf(userIdx));
+        }
     }
 }
