@@ -1,10 +1,11 @@
 package com.toDoList.domain;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -17,10 +18,25 @@ public class Task {
     private Long taskIdx;
     private String title;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "todoIdx")
+    @JoinColumn(name = "toDoIdx")
     private ToDo toDo;
     @CreationTimestamp
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    @ColumnDefault("0")
     private boolean isFin;
+
+    public void checkIsFin() {
+        this.isFin = true;
+    }
+
+    public void unCheckIsFin() {
+        this.isFin = false;
+    }
+
+    public void editTask(String title,LocalDateTime endDate) {
+        this.title=title;
+        this.endDate=endDate;
+    }
+
 }
