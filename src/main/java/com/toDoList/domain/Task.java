@@ -34,7 +34,7 @@ public class Task {
         this.isFin = false;
     }
 
-    public void editTask(String title,LocalDateTime endDate) {
+    public void updateTask(String title,LocalDateTime endDate) {
         this.title=title;
         this.endDate=endDate;
     }

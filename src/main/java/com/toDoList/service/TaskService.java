@@ -19,29 +19,29 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final ToDoRepository toDoRepository;
 
-    public void save(PostTaskDto postTaskDto) {
+    public void saveTask(PostTaskDto postTaskDto) {
         ToDo toDo = toDoRepository.findById(postTaskDto.getTodoIdx()).orElseThrow();
         Task task = postTaskDto.to(toDo, postTaskDto.getTitle(), postTaskDto.getEndDate());
         taskRepository.save(task);
     }
 
-    public void delete(Long taskIdx){
+    public void deleteTask(Long taskIdx){
         taskRepository.deleteById(taskIdx);
     }
 
-    public void check(Long taskIdx) {
+    public void checkTask(Long taskIdx) {
         Task task = taskRepository.findById(taskIdx).orElseThrow();
         log.info("todoIdx {}", task.getToDo().getToDoIdx());
         task.checkIsFin();
     }
 
-    public void uncheck(Long taskIdx) {
+    public void uncheckTask(Long taskIdx) {
         Task task = taskRepository.findById(taskIdx).orElseThrow();
         task.unCheckIsFin();
     }
 
-    public void update(Long taskIdx, UpdateTaskDto updateTaskDto){
+    public void updateTask(Long taskIdx, UpdateTaskDto updateTaskDto){
         Task task = taskRepository.findById(taskIdx).orElseThrow();
-        task.editTask(updateTaskDto.getTitle(), updateTaskDto.getEndDate());
+        task.updateTask(updateTaskDto.getTitle(), updateTaskDto.getEndDate());
     }
 }
