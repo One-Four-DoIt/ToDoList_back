@@ -36,4 +36,24 @@ public class TaskDto {
         private String title;
         private LocalDateTime endDate;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SelectTask {
+        private Long taskIdx;
+        private String title;
+        private LocalDateTime endDate;
+        private boolean isFin;
+
+        public static SelectTask from(Task task) {
+            return SelectTask.builder()
+                    .taskIdx(task.getTaskIdx())
+                    .title(task.getTitle())
+                    .endDate(task.getEndDate())
+                    .isFin(task.isFin())
+                    .build();
+        }
+    }
 }
