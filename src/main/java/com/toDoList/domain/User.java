@@ -1,6 +1,7 @@
 package com.toDoList.domain;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -23,7 +24,12 @@ public class User {
     @CreationTimestamp
     private LocalDate createdAt;
     private LocalDate loginAt;
+    @ColumnDefault("1")
     private int status;
     @OneToMany(mappedBy = "user")
     List<ToDo> toDos = new ArrayList<>();
+
+    public void editPassword(String password) {
+        this.password = password;
+    }
 }
