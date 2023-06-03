@@ -42,16 +42,16 @@ public class JwtFilter extends OncePerRequestFilter {
                     log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
                 }
             } catch (SecurityException | MalformedJwtException e) {
-                log.info("exception", e.getMessage());
+                log.error("exception {}", e.getMessage());
                 throw new ServletException();
             } catch (ExpiredJwtException e) {
-                log.info("exception", e.getMessage());
+                log.error("exception {}", e.getMessage());
                 throw new ServletException();
             } catch (UnsupportedJwtException e) {
-                log.info("exception", e.getMessage());
+                log.error("exception {}", e.getMessage());
                 throw new ServletException();
             } catch (IllegalArgumentException e) {
-                log.info("exception", e.getMessage());
+                log.error("exception {}", e.getMessage());
                 throw new ServletException();
             } catch (Exception e) {
                 throw new ServletException();

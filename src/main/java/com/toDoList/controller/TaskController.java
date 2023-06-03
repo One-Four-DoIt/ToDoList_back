@@ -23,32 +23,32 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping("/post")
-    public ResponseEntity<ResponseDto> save(@RequestBody PostTaskDto postTaskDto) {
-        taskService.save(postTaskDto);
+    public ResponseEntity<ResponseDto> saveTask(@RequestBody PostTaskDto postTaskDto) {
+        taskService.saveTask(postTaskDto);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), POST_SUCCESS_MESSAGE.getMessage()));
     }
 
     @DeleteMapping("/{taskIdx}")
-    public ResponseEntity<ResponseDto> delete(@PathVariable Long taskIdx){
-        taskService.delete(taskIdx);
+    public ResponseEntity<ResponseDto> deleteTask(@PathVariable Long taskIdx){
+        taskService.deleteTask(taskIdx);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), DELETE_SUCCESS_MESSAGE.getMessage()));
     }
 
     @PutMapping("/check/{taskIdx}")
-    public ResponseEntity<ResponseDto> check(@PathVariable Long taskIdx){
-        taskService.check(taskIdx);
+    public ResponseEntity<ResponseDto> checkTask(@PathVariable Long taskIdx){
+        taskService.checkTask(taskIdx);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), CHECK_SUCCESS_MESSAGE.getMessage()));
     }
 
     @PutMapping("/un-check/{taskIdx}")
-    public ResponseEntity<ResponseDto> uncheck(@PathVariable Long taskIdx){
-        taskService.uncheck(taskIdx);
+    public ResponseEntity<ResponseDto> uncheckTask(@PathVariable Long taskIdx){
+        taskService.uncheckTask(taskIdx);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), UNCHECK_SUCCESS_MESSAGE.getMessage()));
     }
 
     @PutMapping("/update/{taskIdx}")
-    public ResponseEntity<ResponseDto> update(@PathVariable Long taskIdx, @RequestBody UpdateTaskDto updateTaskDto){
-        taskService.update(taskIdx, updateTaskDto);
+    public ResponseEntity<ResponseDto> updateTask(@PathVariable Long taskIdx, @RequestBody UpdateTaskDto updateTaskDto){
+        taskService.updateTask(taskIdx, updateTaskDto);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), UPDATE_SUCCESS_MESSAGE.getMessage()));
     }
 }
