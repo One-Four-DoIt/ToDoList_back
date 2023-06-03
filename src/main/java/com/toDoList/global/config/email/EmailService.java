@@ -6,8 +6,10 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 @Service
@@ -17,7 +19,7 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private final String E_KEY = createKey();
 
-    private MimeMessage createMessage(String to)throws Exception{
+    private MimeMessage createMessage(String to) throws MessagingException, UnsupportedEncodingException {
         log.info("보내는 대상 : {}", to);
         log.info("인증 번호 : " + E_KEY);
         MimeMessage  message = emailSender.createMimeMessage();
@@ -69,7 +71,7 @@ public class EmailService {
         return key.toString();
     }
 
-    public String sendSimpleMessage(String to)throws Exception {
+    public String sendSimpleMessage(String to) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = createMessage(to);
         try{//예외처리
             emailSender.send(message);
