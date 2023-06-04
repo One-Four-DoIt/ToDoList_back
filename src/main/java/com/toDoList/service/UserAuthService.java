@@ -3,6 +3,8 @@ package com.toDoList.service;
 import com.toDoList.domain.User;
 import com.toDoList.dto.UserDto.LoginRequest;
 import com.toDoList.dto.UserDto.TokenResponse;
+import com.toDoList.exception.UserAuthException;
+import com.toDoList.exception.UserAuthException.NoSuchEmailException;
 import com.toDoList.global.config.redis.RedisRepository;
 import com.toDoList.global.config.security.jwt.JwtTokenProvider;
 import com.toDoList.global.config.security.jwt.TokenInfoResponse;
@@ -10,6 +12,7 @@ import com.toDoList.repository.springDataJpa.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -30,7 +33,7 @@ public class UserAuthService {
     private final RedisRepository redisRepository;
 
     public User validateUserEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NoSuchEmailException());
         return user;
     }
 

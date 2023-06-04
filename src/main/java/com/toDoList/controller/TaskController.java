@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.toDoList.dto.responseMessage.TaskMessage.SuccessMessage.*;
+import static com.toDoList.dto.responseMessage.TaskConstants.SuccessMessage.*;
 
 @RestController
 @RequiredArgsConstructor
