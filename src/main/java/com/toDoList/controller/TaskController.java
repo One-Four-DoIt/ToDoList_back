@@ -1,10 +1,8 @@
 package com.toDoList.controller;
 
-import com.toDoList.dto.TaskDto;
 import com.toDoList.dto.TaskDto.PostTaskDto;
 import com.toDoList.dto.TaskDto.SelectTask;
 import com.toDoList.dto.TaskDto.UpdateTaskDto;
-import com.toDoList.dto.ToDoDto;
 import com.toDoList.global.dto.ResponseDto;
 import com.toDoList.service.TaskService;
 import io.swagger.annotations.Api;
@@ -13,13 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static com.toDoList.dto.responseMessage.TaskMessage.SuccessMessage.*;
-import static com.toDoList.dto.responseMessage.ToDoMessage.SuccessMessage.SELECT_SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
