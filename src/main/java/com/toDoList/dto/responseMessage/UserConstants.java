@@ -3,7 +3,7 @@ package com.toDoList.dto.responseMessage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public class UserMessage {
+public class UserConstants {
     @Getter
     @RequiredArgsConstructor
     public enum SuccessMessage {
@@ -14,5 +14,20 @@ public class UserMessage {
         EMAIL_SEND_SUCCESS("EMAIL 인증번호 전송에 성공했습니다."),
         EMAIL_DUP_SUCCESS("EMAIL 중복체크에 성공했습니다.");
         private final String message;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum FailMessage {
+        UNVALID_EMAIL_MESSAGE("Email이 유효하지 않습니다.");
+
+        private final String message;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum FailCode {
+        UNVALID_EMAIL_CODE("USR001");
+        private final String code;
     }
 }

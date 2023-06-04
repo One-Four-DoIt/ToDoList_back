@@ -1,6 +1,5 @@
 package com.toDoList.controller;
 
-import com.toDoList.dto.ToDoDto;
 import com.toDoList.dto.ToDoDto.SaveToDoRequest;
 import com.toDoList.dto.ToDoDto.UpdateToDoRequest;
 import com.toDoList.dto.ToDoDto.SelectToDo;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.toDoList.dto.responseMessage.ToDoMessage.SuccessMessage.*;
+import static com.toDoList.dto.responseMessage.ToDoConstants.SuccessMessage.*;
 
 @RestController
 @RequiredArgsConstructor

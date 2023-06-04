@@ -6,6 +6,10 @@ import com.toDoList.dto.TaskDto;
 import com.toDoList.dto.TaskDto.PostTaskDto;
 import com.toDoList.dto.TaskDto.SelectTask;
 import com.toDoList.dto.TaskDto.UpdateTaskDto;
+import com.toDoList.exception.TaskException;
+import com.toDoList.exception.TaskException.NoSuchTaskIdxException;
+import com.toDoList.exception.ToDoException;
+import com.toDoList.exception.ToDoException.NoSuchToDoIdxException;
 import com.toDoList.repository.springDataJpa.TaskRepository;
 import com.toDoList.repository.springDataJpa.ToDoRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +29,7 @@ public class TaskService {
     private final ToDoRepository toDoRepository;
 
     public void saveTask(PostTaskDto postTaskDto) {
-        ToDo toDo = toDoRepository.findById(postTaskDto.getTodoIdx()).orElseThrow();
+        ToDo toDo = toDoRepository.findById(postTaskDto.getTodoIdx()).orElseThrow(() -> new NoSuchTaskIdxException());
         Task task = postTaskDto.to(toDo, postTaskDto.getTitle(), postTaskDto.getEndDate());
         taskRepository.save(task);
     }
@@ -35,23 +39,23 @@ public class TaskService {
     }
 
     public void checkTask(Long taskIdx) {
-        Task task = taskRepository.findById(taskIdx).orElseThrow();
+        Task task = taskRepository.findById(taskIdx).orElseThrow(() -> new NoSuchTaskIdxException());
         log.info("todoIdx {}", task.getToDo().getToDoIdx());
         task.checkIsFin();
     }
 
     public void uncheckTask(Long taskIdx) {
-        Task task = taskRepository.findById(taskIdx).orElseThrow();
+        Task task = taskRepository.findById(taskIdx).orElseThrow(() -> new NoSuchTaskIdxException());
         task.unCheckIsFin();
     }
 
     public void updateTask(Long taskIdx, UpdateTaskDto updateTaskDto){
-        Task task = taskRepository.findById(taskIdx).orElseThrow();
+        Task task = taskRepository.findById(taskIdx).orElseThrow(() -> new NoSuchTaskIdxException());
         task.updateTask(updateTaskDto.getTitle(), updateTaskDto.getEndDate());
     }
 
     public List<SelectTask> orderBy(String orderBy, Long toDoIdx) {
-        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow();
+        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow(() -> new NoSuchToDoIdxException());
         List<SelectTask> selectTasks = new ArrayList<>();
         selectTasks = taskRepository.findAllOrderBy(orderBy, toDo);
         return selectTasks;

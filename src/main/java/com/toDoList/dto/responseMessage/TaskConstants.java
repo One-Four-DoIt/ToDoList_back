@@ -3,7 +3,7 @@ package com.toDoList.dto.responseMessage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public class TaskMessage {
+public class TaskConstants {
     @Getter
     @RequiredArgsConstructor
     public enum SuccessMessage {
@@ -14,5 +14,19 @@ public class TaskMessage {
         SELECT_SUCCESS_MESSAGE("Task 우선순위 조회에 성공했습니다."),
         CHECK_SUCCESS_MESSAGE("Task 체크에 성공했습니다.");
         private final String message;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum FailMessage {
+        UNVALID_IDX_MESSAGE("해당 IDX가 존재하지 않습니다.");
+        private final String message;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum FailCode {
+        UNVALID_IDX_CODE("TA001");
+        private final String code;
     }
 }
