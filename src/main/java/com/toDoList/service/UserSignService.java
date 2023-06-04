@@ -3,6 +3,8 @@ package com.toDoList.service;
 import com.toDoList.domain.User;
 import com.toDoList.dto.UserDto.EditPassword;
 import com.toDoList.dto.UserDto.SignUpRequest;
+import com.toDoList.exception.UserAuthException;
+import com.toDoList.exception.UserAuthException.NoSuchEmailException;
 import com.toDoList.global.config.email.EmailService;
 import com.toDoList.repository.springDataJpa.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +52,7 @@ public class UserSignService {
     }
 
     public void editPassword(EditPassword editPassword) {
-        User user = userRepository.findByEmail(editPassword.getEmail()).orElseThrow();
+        User user = userRepository.findByEmail(editPassword.getEmail()).orElseThrow(() -> new NoSuchEmailException());
         String password = bCryptPasswordEncoder.encode(editPassword.getPassword());
         user.editPassword(password);
     }
