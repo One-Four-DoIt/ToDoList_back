@@ -3,11 +3,11 @@ package com.toDoList.service;
 import com.toDoList.domain.ToDo;
 import com.toDoList.domain.User;
 import com.toDoList.dto.ToDoDto.SaveToDoRequest;
-import com.toDoList.dto.ToDoDto.UpdateToDoRequest;
 import com.toDoList.dto.ToDoDto.SelectToDo;
+import com.toDoList.dto.ToDoDto.UpdateToDoRequest;
+import com.toDoList.exception.ToDoException.NoSuchToDoIdxException;
 import com.toDoList.global.config.security.util.SecurityUtils;
 import com.toDoList.repository.springDataJpa.ToDoRepository;
-import com.toDoList.repository.springDataJpa.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,17 +48,17 @@ public class ToDoService {
     }
 
     public void checkToDo(Long toDoIdx){
-        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow();
+        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow(() -> new NoSuchToDoIdxException());
         toDo.checkIsFin();
     }
 
     public void unCheckToDo(Long toDoIdx){
-        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow();
+        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow(() -> new NoSuchToDoIdxException());
         toDo.uncheckIsFin();
     }
 
     public void updateToDo(Long toDoIdx, UpdateToDoRequest updateToDoRequest){
-        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow();
+        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow(() -> new NoSuchToDoIdxException());
         toDo.updateToDo(updateToDoRequest.getTitle(),updateToDoRequest.getEndDate());
     }
 
