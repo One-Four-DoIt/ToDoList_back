@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,11 +35,11 @@ public class ToDoController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), SAVE_TODO_SUCCESS.getMessage()));
     }
 
-    @GetMapping("/order-by/{orderBy}")
-    @ApiOperation(value = "ToDo 정렬", notes = "ToDo 정렬 -> orderBy에 newest, oldest, deadline")
-    public ResponseEntity<ResponseDto<List<SelectToDo>>> toDoOrder(@PathVariable String orderBy) {
+    @GetMapping(value = {"", "/order-by/{orderBy}"})
+    @ApiOperation(value = "ToDo 정렬(/order-by/{orderBy}) 및 조회(그냥 /)", notes = "ToDo 정렬 -> orderBy에 newest, oldest, deadline 및 조회")
+    public ResponseEntity<ResponseDto<List<SelectToDo>>> toDoOrder(@PathVariable @Nullable String orderBy) {
         List<SelectToDo> selectToDos = toDoService.orderBy(orderBy);
-        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_ORDER_SUCCESS.getMessage(), selectToDos));
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_SUCCESS.getMessage(), selectToDos));
     }
 
 }

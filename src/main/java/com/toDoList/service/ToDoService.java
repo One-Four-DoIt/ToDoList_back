@@ -32,6 +32,8 @@ public class ToDoService {
 
     public List<SelectToDo> orderBy(String orderBy) {
         User user = SecurityUtils.getLoggedInUser().orElseThrow();
+        if (orderBy == null)
+            orderBy = "newest";
         List<ToDo> toDos = toDoRepository.findAllOrderByStartDate(orderBy, user);
         List<SelectToDo> selectToDos = new ArrayList<>();
         for (int i = 0; i < toDos.size(); i++) {
