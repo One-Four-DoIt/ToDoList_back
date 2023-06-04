@@ -4,9 +4,11 @@ import com.toDoList.domain.Task;
 import com.toDoList.domain.ToDo;
 import com.toDoList.domain.User;
 import com.toDoList.dto.TaskDto.SelectTask;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ public class ToDoDto {
         private String title;
         private LocalDateTime endDate;
         private boolean isFin;
-        private List<SelectTask> tasks;
+        private List<SelectTask> selectTasks;
 
         public static SelectToDo from(ToDo toDo) {
             return SelectToDo.builder()
@@ -47,7 +49,7 @@ public class ToDoDto {
                     .title(toDo.getTitle())
                     .endDate(toDo.getEndDate())
                     .isFin(toDo.isFin())
-                    .tasks(toSelectTasks(toDo.getTasks()))
+                    .selectTasks(toSelectTasks(toDo.getTasks()))
                     .build();
         }
 
@@ -60,5 +62,16 @@ public class ToDoDto {
 
             return selectTasks;
         }
+
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateToDoRequest {
+        private String title;
+        private LocalDateTime endDate;
     }
 }
+

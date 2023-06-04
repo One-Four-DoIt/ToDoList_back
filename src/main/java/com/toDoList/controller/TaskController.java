@@ -1,17 +1,25 @@
 package com.toDoList.controller;
 
+import com.toDoList.dto.TaskDto;
 import com.toDoList.dto.TaskDto.PostTaskDto;
+import com.toDoList.dto.TaskDto.SelectTask;
 import com.toDoList.dto.TaskDto.UpdateTaskDto;
+import com.toDoList.dto.ToDoDto;
 import com.toDoList.global.dto.ResponseDto;
 import com.toDoList.service.TaskService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.toDoList.dto.responseMessage.TaskMessage.SuccessMessage.*;
+import static com.toDoList.dto.responseMessage.ToDoMessage.SuccessMessage.SELECT_SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +58,12 @@ public class TaskController {
     public ResponseEntity<ResponseDto> updateTask(@PathVariable Long taskIdx, @RequestBody UpdateTaskDto updateTaskDto){
         taskService.updateTask(taskIdx, updateTaskDto);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), UPDATE_SUCCESS_MESSAGE.getMessage()));
+    }
+
+    @GetMapping("/order-by/{orderBy}/{toDoIdx}")
+    @ApiOperation(value = "Task 정렬", notes = "Task 정렬 -> orderBy에 newest, oldest")
+    public ResponseEntity<ResponseDto<List<SelectTask>>> toDoOrder(@PathVariable String orderBy, @PathVariable Long toDoIdx) {
+        List<SelectTask> selectTasks = taskService.orderBy(orderBy, toDoIdx);
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), SELECT_SUCCESS_MESSAGE.getMessage(), selectTasks));
     }
 }

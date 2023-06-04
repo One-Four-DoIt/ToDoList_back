@@ -3,7 +3,7 @@ package com.toDoList.service;
 import com.toDoList.domain.ToDo;
 import com.toDoList.domain.User;
 import com.toDoList.dto.ToDoDto.SaveToDoRequest;
-import com.toDoList.dto.ToDoDto;
+import com.toDoList.dto.ToDoDto.UpdateToDoRequest;
 import com.toDoList.dto.ToDoDto.SelectToDo;
 import com.toDoList.global.config.security.util.SecurityUtils;
 import com.toDoList.repository.springDataJpa.ToDoRepository;
@@ -32,6 +32,8 @@ public class ToDoService {
 
     public List<SelectToDo> orderBy(String orderBy) {
         User user = SecurityUtils.getLoggedInUser().orElseThrow();
+        if (orderBy == null)
+            orderBy = "newest";
         List<ToDo> toDos = toDoRepository.findAllOrderByStartDate(orderBy, user);
         List<SelectToDo> selectToDos = new ArrayList<>();
         for (int i = 0; i < toDos.size(); i++) {
@@ -40,4 +42,24 @@ public class ToDoService {
         }
         return selectToDos;
     }
+
+    public void deleteToDo(Long toDoIdx){
+        toDoRepository.deleteById(toDoIdx);
+    }
+
+    public void checkToDo(Long toDoIdx){
+        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow();
+        toDo.checkIsFin();
+    }
+
+    public void unCheckToDo(Long toDoIdx){
+        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow();
+        toDo.uncheckIsFin();
+    }
+
+    public void updateToDo(Long toDoIdx, UpdateToDoRequest updateToDoRequest){
+        ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow();
+        toDo.updateToDo(updateToDoRequest.getTitle(),updateToDoRequest.getEndDate());
+    }
+
 }
