@@ -29,6 +29,18 @@ public class ToDo {
     private LocalDateTime endDate;
     private boolean isFin;
 
+    public void checkIsFin(){
+        this.isFin = true;
+    }
+
+    public void uncheckIsFin(){
+        this.isFin = false;
+    }
+
+    public void updateToDo(String title, LocalDateTime endDate){
+        this.title = title;
+        this.endDate = endDate;
+    }
 
 }
 
