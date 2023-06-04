@@ -3,8 +3,8 @@ package com.toDoList.exception;
 import com.toDoList.global.exception.ApplicationException;
 import org.springframework.http.HttpStatus;
 
-import static com.toDoList.dto.responseMessage.UserConstant.FailCode.UNVALID_EMAIL_CODE;
-import static com.toDoList.dto.responseMessage.UserConstant.FailMessage.UNVALID_EMAIL_MESSAGE;
+import static com.toDoList.dto.responseMessage.UserConstants.FailCode.UNVALID_EMAIL_CODE;
+import static com.toDoList.dto.responseMessage.UserConstants.FailMessage.UNVALID_EMAIL_MESSAGE;
 
 public abstract class UserAuthException extends ApplicationException {
 

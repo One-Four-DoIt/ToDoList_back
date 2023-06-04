@@ -3,7 +3,7 @@ package com.toDoList.dto.responseMessage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public class UserConstant {
+public class UserConstants {
     @Getter
     @RequiredArgsConstructor
     public enum SuccessMessage {
