@@ -62,5 +62,16 @@ public class ToDoDto {
 
             return selectTasks;
         }
+
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateToDoRequest {
+        private String title;
+        private LocalDateTime endDate;
     }
 }
+
