@@ -48,7 +48,7 @@ public class ToDoController {
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), DELETE_TODO_SUCCESS.getMessage()));
     }
 
-    @GetMapping("/check/{toDoIdx}")
+    @PutMapping("/check/{toDoIdx}")
     @ApiOperation(value = "ToDo 체크", notes = "ToDo 체크 완료")
     public ResponseEntity<ResponseDto> checkToDo(@PathVariable Long toDoIdx){
         toDoService.checkToDo(toDoIdx);

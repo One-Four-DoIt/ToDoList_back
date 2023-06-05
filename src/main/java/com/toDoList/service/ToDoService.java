@@ -1,5 +1,6 @@
 package com.toDoList.service;
 
+import com.toDoList.domain.Task;
 import com.toDoList.domain.ToDo;
 import com.toDoList.domain.User;
 import com.toDoList.dto.ToDoDto.SaveToDoRequest;
@@ -49,6 +50,10 @@ public class ToDoService {
 
     public void checkToDo(Long toDoIdx){
         ToDo toDo = toDoRepository.findById(toDoIdx).orElseThrow(() -> new NoSuchToDoIdxException());
+        List<Task> tasks = toDo.getTasks();
+        for (int i = 0; i < tasks.size(); i++) {
+            tasks.get(i).checkIsFin();
+        }
         toDo.checkIsFin();
     }
 
