@@ -22,14 +22,14 @@ public class UserAuthController {
     private final UserAuthService userAuthService;
 
     @PostMapping("/login")
-    @ApiOperation(value = "로그인", notes = "로그인을 진행합니다.")
+    @ApiOperation(value = "로그인", notes = "http://~/user/login 그리고 body에 email, password")
     public ResponseEntity<ResponseDto<TokenResponse>> login(@RequestBody LoginRequest loginRequest) {
         TokenResponse login = userAuthService.login(loginRequest);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGIN_SUCCESS.getMessage(), login));
     }
 
     @PostMapping("/logout")
-    @ApiOperation(value = "로그아웃", notes = "accessToken 필요")
+    @ApiOperation(value = "로그아웃", notes = "http://~/user/logout 추가로 헤더에 Authorization라는 키에 발급받은 accessToekn 넣어야 함 -> 'Bearer ' + 'AccessToken' -> Bearer 뒤에 한칸 띄기 주의")
     public ResponseEntity<ResponseDto> logout(@RequestHeader("Authorization") String authorization) {
         userAuthService.logout(authorization);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGOUT_SUCCESS.getMessage()));
