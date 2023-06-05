@@ -22,7 +22,7 @@ public class UserSignController {
     private final UserSignService userSignService;
 
     @PostMapping("/email")
-    @ApiOperation(value = "이메일 인증 전송", notes = "이메일 인증을 전송합니다.")
+    @ApiOperation(value = "이메일 인증 전송", notes = "http://~/user/email body에는 email")
     public ResponseEntity<ResponseDto<String>> sendEmail(@RequestBody Email email) {
         try {
             String key = userSignService.sendEmail(email.getEmail());
@@ -34,28 +34,28 @@ public class UserSignController {
     }
 
     @GetMapping("/email/duplicate")
-    @ApiOperation(value = "이메일 중복체크", notes = "이메일 중복체크를 합니다.")
+    @ApiOperation(value = "이메일 중복체크", notes = "http://~/user/email/duplicate?email=값")
     public ResponseEntity<ResponseDto<Boolean>> checkEmail(String email) {
         boolean isDup = userSignService.checkEmailDup(email);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EMAIL_DUP_SUCCESS.getMessage(), isDup));
     }
 
     @GetMapping("/nick/duplicate")
-    @ApiOperation(value = "닉네임 중복체크", notes = "닉네임 중복체크를 합니다.")
+    @ApiOperation(value = "닉네임 중복체크", notes = "http://~/user/nick/duplicate?nickNamre=값")
     public ResponseEntity<ResponseDto<Boolean>> checkNick(String nickName) {
         boolean isDup = userSignService.checkNickDup(nickName);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EMAIL_DUP_SUCCESS.getMessage(), isDup));
     }
 
     @PostMapping("/signup")
-    @ApiOperation(value = "회원가입", notes = "회원가입 완료합니다.")
+    @ApiOperation(value = "회원가입", notes = "http://~/user/signup body에 nickName, email, password")
     public ResponseEntity<ResponseDto> signUp(@RequestBody SignUpRequest signUpRequest) {
         userSignService.signUp(signUpRequest);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), SIGNUP_SUCCESS.getMessage()));
     }
 
     @PostMapping("/password-reset")
-    @ApiOperation(value = "비밀번호 재설정", notes = "비밀번호를 재설정 합니다.")
+    @ApiOperation(value = "비밀번호 재설정", notes = "http://~/password-reset body에 email, password")
     public ResponseEntity<ResponseDto> login(@RequestBody EditPassword editPassword) {
         userSignService.editPassword(editPassword);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.CREATED.value(), EDIT_PASSWORD_SUCCESS.getMessage()));
