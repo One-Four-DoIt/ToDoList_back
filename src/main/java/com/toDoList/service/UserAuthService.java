@@ -5,9 +5,11 @@ import com.toDoList.dto.UserDto.LoginRequest;
 import com.toDoList.dto.UserDto.TokenResponse;
 import com.toDoList.exception.UserAuthException;
 import com.toDoList.exception.UserAuthException.NoSuchEmailException;
+import com.toDoList.exception.UserAuthException.NoSuchTokenException;
 import com.toDoList.global.config.redis.RedisRepository;
 import com.toDoList.global.config.security.jwt.JwtTokenProvider;
 import com.toDoList.global.config.security.jwt.TokenInfoResponse;
+import com.toDoList.global.config.security.util.SecurityUtils;
 import com.toDoList.repository.springDataJpa.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.ServletRequest;
 import java.time.Duration;
 
 @Service
@@ -58,5 +61,18 @@ public class UserAuthService {
         } finally {
             redisRepository.deleteValues(String.valueOf(userIdx));
         }
+    }
+
+    public TokenResponse reIssueToken(String refreshToken) {
+        Long userIdx = SecurityUtils.getLoggedInUser().orElseThrow().getUserIdx();
+        String token = redisRepository.getValues(userIdx.toString()).orElseThrow(() -> new NoSuchTokenException());
+
+        if (!token.equals(refreshToken.substring(7)))
+            throw new NoSuchTokenException();
+
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        TokenInfoResponse tokenInfoResponse = jwtTokenProvider.createToken(authentication);
+        log.info("재발급 & 저장");
+        return TokenResponse.from(tokenInfoResponse);
     }
 }
