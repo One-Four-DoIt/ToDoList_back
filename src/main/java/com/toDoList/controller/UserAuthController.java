@@ -17,7 +17,7 @@ import static com.toDoList.dto.responseMessage.UserConstants.SuccessMessage.*;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/user")
-@Api(tags = "USER API")
+@Api(tags = "USER_AUTH API")
 public class UserAuthController {
     private final UserAuthService userAuthService;
 
@@ -33,5 +33,12 @@ public class UserAuthController {
     public ResponseEntity<ResponseDto> logout(@RequestHeader("Authorization") String authorization) {
         userAuthService.logout(authorization);
         return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), LOGOUT_SUCCESS.getMessage()));
+    }
+
+    @PostMapping("/re-issue")
+    @ApiOperation(value = "토큰 재발급", notes = "http://~/user/re-issue 이번에는 헤더의 Authroization에 refreshToken을 넣어야 합니다")
+    public ResponseEntity<ResponseDto<TokenResponse>> reIssueToken(@RequestHeader("Authorization") String refreshToken) {
+        TokenResponse tokenResponse = userAuthService.reIssueToken(refreshToken);
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), REISSUE_SUCCESS.getMessage(), tokenResponse));
     }
 }
