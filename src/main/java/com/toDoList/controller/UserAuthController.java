@@ -17,7 +17,7 @@ import static com.toDoList.dto.responseMessage.UserConstants.SuccessMessage.*;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/user")
-@Api(tags = "USER API")
+@Api(tags = "USER_AUTH API")
 public class UserAuthController {
     private final UserAuthService userAuthService;
 
