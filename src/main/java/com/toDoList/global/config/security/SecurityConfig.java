@@ -1,5 +1,8 @@
 package com.toDoList.global.config.security;
 
+import com.toDoList.global.config.security.filter.CustomAccessDeniedHandler;
+import com.toDoList.global.config.security.filter.CustomAuthenticationEntryPoint;
+import com.toDoList.global.config.security.filter.JwtExceptionFilter;
 import com.toDoList.global.config.security.filter.JwtFilter;
 import com.toDoList.global.config.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final JwtExceptionFilter exceptionFilter;
     @Bean
     public BCryptPasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
@@ -43,10 +49,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/v3/api-docs").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 //jwt 사용을 위해 Sesssion 사용 해제
                 .and()
-                .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionFilter, JwtFilter.class);
     }
 
     @Override
