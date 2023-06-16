@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
+
 import static com.toDoList.dto.responseMessage.UserConstants.SuccessMessage.*;
 
 @RestController
@@ -23,14 +26,9 @@ public class UserSignController {
 
     @PostMapping("/email")
     @ApiOperation(value = "이메일 인증 전송", notes = "http://~/user/email body에는 email")
-    public ResponseEntity<ResponseDto<String>> sendEmail(@RequestBody Email email) {
-        try {
-            String key = userSignService.sendEmail(email.getEmail());
-            return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EMAIL_SEND_SUCCESS.getMessage(), key));
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<ResponseDto<String>> sendEmail(@RequestBody Email email) throws MessagingException, UnsupportedEncodingException {
+        String key = userSignService.sendEmail(email.getEmail());
+        return ResponseEntity.ok(ResponseDto.create(HttpStatus.OK.value(), EMAIL_SEND_SUCCESS.getMessage(), key));
     }
 
     @GetMapping("/email/duplicate")
